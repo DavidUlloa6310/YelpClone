@@ -61,7 +61,10 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
+                Restaurant restaurant = restaurantArrayList.get(position);
+                Intent intent = new Intent(getApplicationContext(), RatingsActivity.class);
+                intent.putExtra("restaurant", restaurant);
+                startActivity(intent);
             }
 
             @Override

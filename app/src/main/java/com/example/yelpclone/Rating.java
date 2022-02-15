@@ -18,4 +18,9 @@ public class Rating implements Serializable {
     public double getRating() {
         return rating;
     }
+
+    @Override
+    public String toString() {
+        return name + ", " + rating + "/10";
+    }
 }

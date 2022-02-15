@@ -27,7 +27,7 @@ public class AddRating extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_rating);
 
-        restaurant = (Restaurant) getIntent().getSerializableExtra("Restaurant");
+        restaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
         position = getIntent().getIntExtra("position", 0);
 
         restaurantNameTextView = findViewById(R.id.restrauntNameTextView);
@@ -43,6 +43,11 @@ public class AddRating extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
                 restaurant.addRating(new Rating(nameTextView.getText().toString(), Double.parseDouble(ratingTextView.getText().toString())));
+
+                System.out.println(restaurant.getRatings());
+
+                intent.putExtra("restaurant", restaurant);
+                intent.putExtra("position", position);
 
                 startActivity(intent);
             }

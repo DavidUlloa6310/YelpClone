@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YelpClone">
         <activity
+            android:name=".RatingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".CreateRestaurant"
             android:exported="false" />
         <activity

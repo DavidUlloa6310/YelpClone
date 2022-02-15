@@ -40,7 +40,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        System.out.println(restaurantArrayList.get(0).getRatings());
+        int position = getIntent().getIntExtra("position", 0);
+        Restaurant restaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
+
+        if (restaurant != null) {
+            restaurantArrayList.set(position, restaurant);
+            mAdapter.notifyItemChanged(position);
+        }
     }
 
     public void buildRecyclerView() {
@@ -55,13 +61,13 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-//                viewRatings(position);
+
             }
 
             @Override
             public void onCommentClick(int position) {
                 Intent intent = new Intent(getApplicationContext(), AddRating.class);
-                intent.putExtra("Restaurant", mAdapter.getRestaurantList().get(position));
+                intent.putExtra("restaurant", mAdapter.getRestaurantList().get(position));
                 intent.putExtra("position", position);
                 startActivity(intent);
             }

@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.YelpClone">
+
         <activity
             android:name=".RatingsActivity"
             android:exported="false" />

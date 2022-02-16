@@ -18,14 +18,14 @@ public class CreateRestaurant extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_restaurant);
-        restrauntName = findViewById(R.id.restrauntNameTextView);
+        restrauntName = findViewById(R.id.restaurantNameTextView);
         button = findViewById(R.id.createRestrauntButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("restaurantName", restrauntName.getText().toString());
-                intent.putExtra("addRating", false);
+                intent.setAction("Add Restaurant");
                 startActivity(intent);
             }
         });

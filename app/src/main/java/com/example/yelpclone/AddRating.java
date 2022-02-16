@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AddRating extends AppCompatActivity {
 
@@ -40,14 +41,24 @@ public class AddRating extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                double rating = Double.parseDouble(ratingTextView.getText().toString());
+
+                if (rating < 0 || rating > 10) {
+                    Toast.makeText(getApplicationContext(), "Please create a rating between 0 and 10", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
-                restaurant.addRating(new Rating(nameTextView.getText().toString(), Double.parseDouble(ratingTextView.getText().toString())));
+                restaurant.addRating(new Rating(nameTextView.getText().toString(), rating));
 
                 System.out.println(restaurant.getRatings());
 
                 intent.putExtra("restaurant", restaurant);
                 intent.putExtra("position", position);
+
+                intent.setAction("Add Rating");
 
                 startActivity(intent);
             }

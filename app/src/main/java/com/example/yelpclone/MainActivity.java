@@ -1,6 +1,7 @@
 package com.example.yelpclone;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,11 +17,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Restaurant> restaurantArrayList;
 
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    private Button newRestaurantButton;
 
     private TextView infoTextView;
 
@@ -28,32 +30,43 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         getSupportActionBar().setTitle("Yelp!");
 
+        newRestaurantButton = findViewById(R.id.newRestaurantButton);
+
         buildRecyclerView();
-
-        restaurantArrayList = mAdapter.getRestaurantList();
-
-        createExampleList();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        int position = getIntent().getIntExtra("position", 0);
-        Restaurant restaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
+        Intent intent = getIntent();
+        String action = getIntent().getAction();
 
-        if (restaurant != null) {
-            restaurantArrayList.set(position, restaurant);
-            mAdapter.notifyItemChanged(position);
+        System.out.println(action);
+
+        if (action.equals("Add Rating")) {
+            int position = getIntent().getIntExtra("position", 0);
+            Restaurant restaurant = (Restaurant) getIntent().getSerializableExtra("restaurant");
+
+            if (restaurant != null) {
+                Data.getRestaurants().set(position, restaurant);
+                mAdapter.notifyItemChanged(position);
+            }
+        } else if (action.equals("Add Restaurant")) {
+            Restaurant restaurant = new Restaurant(R.drawable.ic_food, intent.getStringExtra("restaurantName"));
+            addRestaurant(restaurant);
         }
+
+        intent.setAction("");
     }
 
     public void buildRecyclerView() {
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new ExampleAdapter(new ArrayList<Restaurant>());
+        mAdapter = new ExampleAdapter(Data.getRestaurants());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -61,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Restaurant restaurant = restaurantArrayList.get(position);
+                Restaurant restaurant = Data.getRestaurants().get(position);
                 Intent intent = new Intent(getApplicationContext(), RatingsActivity.class);
                 intent.putExtra("restaurant", restaurant);
                 startActivity(intent);
@@ -77,7 +90,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void createExampleList() {
-        restaurantArrayList.add(new Restaurant(R.drawable.ic_food, "Test"));
+    public void goToRestaurantActivity(View view) {
+        Intent intent = new Intent(this, CreateRestaurant.class);
+        startActivity(intent);
+    }
+
+    public void addRestaurant(Restaurant restaurant) {
+        Data.getRestaurants().add(restaurant);
+        mAdapter.notifyItemInserted(Data.getRestaurants().size() - 1);
     }
 }
